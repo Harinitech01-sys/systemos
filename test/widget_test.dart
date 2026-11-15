@@ -2,9 +2,62 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:harinios_app/app.dart';
+import 'package:harinios_app/core/database/app_database.dart';
 import 'package:harinios_app/features/home/data/dashboard_preview_data.dart';
 import 'package:harinios_app/features/home/presentation/home_screen.dart';
+import 'package:harinios_app/features/tasks/domain/task_repository.dart';
 import 'package:harinios_app/core/theme/app_theme.dart';
+
+class _MemoryTaskRepository implements TaskRepository {
+  final List<TaskItem> _tasks = [];
+  int _nextId = 1;
+
+  @override
+  Stream<List<TaskItem>> watchTasks() => Stream.value(List.of(_tasks));
+
+  @override
+  Future<int> addTask(String title) async {
+    final id = _nextId++;
+    _tasks.add(
+      TaskItem(
+        id: id,
+        title: title.trim(),
+        notes: null,
+        createdAt: DateTime.now(),
+        isCompleted: false,
+      ),
+    );
+    return id;
+  }
+
+  @override
+  Future<bool> updateTaskTitle(int id, String title) async {
+    final index = _tasks.indexWhere((task) => task.id == id);
+    if (index < 0) return false;
+    _tasks[index] = _tasks[index].copyWith(title: title.trim());
+    return true;
+  }
+
+  @override
+  Future<bool> setTaskCompleted(int id, bool isCompleted) async {
+    final index = _tasks.indexWhere((task) => task.id == id);
+    if (index < 0) return false;
+    _tasks[index] = _tasks[index].copyWith(isCompleted: isCompleted);
+    return true;
+  }
+
+  @override
+  Future<bool> deleteTask(int id) async {
+    final previousLength = _tasks.length;
+    _tasks.removeWhere((task) => task.id == id);
+    return _tasks.length != previousLength;
+  }
+}
+
+Future<void> pumpApp(WidgetTester tester) async {
+  await tester.pumpWidget(HariniOSApp(taskRepository: _MemoryTaskRepository()));
+  await tester.pumpAndSettle();
+}
 
 void main() {
   testWidgets('bottom navigation opens each destination', (tester) async {
@@ -13,8 +66,7 @@ void main() {
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
 
-    await tester.pumpWidget(const HariniOSApp());
-    await tester.pumpAndSettle();
+    await pumpApp(tester);
 
     expect(find.text('SAMPLE PREVIEW · NOT SAVED'), findsOneWidget);
     expect(find.text("TODAY'S PROGRESS"), findsOneWidget);
@@ -22,8 +74,8 @@ void main() {
     expect(find.byKey(const ValueKey('dashboard-date')), findsOneWidget);
 
     const destinations = {
-      'Plan': 'Your daily and weekly plans will live here.',
-      'Add': 'Create and capture items here.',
+      'Plan': 'Nothing planned yet.',
+      'Add': 'Capture one thing you want to get done.',
       'Insights': 'Your progress and patterns will appear here.',
       'Settings': 'Personalize your HariniOS experience here.',
       'Home': 'SAMPLE PREVIEW · NOT SAVED',
@@ -56,8 +108,7 @@ void main() {
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
 
-    await tester.pumpWidget(const HariniOSApp());
-    await tester.pumpAndSettle();
+    await pumpApp(tester);
     await tester.scrollUntilVisible(
       find.text('Add a task'),
       300,
@@ -66,7 +117,41 @@ void main() {
     await tester.tap(find.text('Add a task'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Create and capture items here.'), findsOneWidget);
+    expect(
+      find.text('Capture one thing you want to get done.'),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('a task can be created and shown in the plan', (tester) async {
+    tester.view.physicalSize = const Size(360, 800);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await pumpApp(tester);
+    await tester.tap(
+      find.descendant(
+        of: find.byType(NavigationBar),
+        matching: find.text('Add'),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.enterText(
+      find.byKey(const ValueKey('task-title-input')),
+      'Persist my first task',
+    );
+    await tester.tap(find.byKey(const ValueKey('save-task-button')));
+    await tester.pumpAndSettle();
+
+    await tester.tap(
+      find.descendant(
+        of: find.byType(NavigationBar),
+        matching: find.text('Plan'),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('Persist my first task'), findsOneWidget);
   });
 
   testWidgets('dashboard shows empty states when preview data is empty', (

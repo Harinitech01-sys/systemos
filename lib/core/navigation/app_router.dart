@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 
+import '../../features/tasks/domain/task_repository.dart';
 import '../../features/add/presentation/add_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
 import '../../features/insights/presentation/insights_screen.dart';
@@ -7,7 +8,7 @@ import '../../features/plan/presentation/plan_screen.dart';
 import '../../features/settings/presentation/settings_screen.dart';
 import 'app_shell.dart';
 
-final GoRouter appRouter = GoRouter(
+GoRouter createAppRouter(TaskRepository taskRepository) => GoRouter(
   initialLocation: '/',
   routes: [
     StatefulShellRoute.indexedStack(
@@ -23,7 +24,8 @@ final GoRouter appRouter = GoRouter(
           routes: [
             GoRoute(
               path: '/plan',
-              builder: (context, state) => const PlanScreen(),
+              builder: (context, state) =>
+                  PlanScreen(repository: taskRepository),
             ),
           ],
         ),
@@ -31,7 +33,8 @@ final GoRouter appRouter = GoRouter(
           routes: [
             GoRoute(
               path: '/add',
-              builder: (context, state) => const AddScreen(),
+              builder: (context, state) =>
+                  AddScreen(repository: taskRepository),
             ),
           ],
         ),

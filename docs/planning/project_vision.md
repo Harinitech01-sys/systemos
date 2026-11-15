@@ -39,4 +39,7 @@ The first milestone establishes the app foundation: theme system, app entry poin
 The second milestone adds GoRouter navigation, a persistent five-destination app shell, and separate placeholder screens. The Home destination is intentionally left ready for the Day 3 dashboard.
 
 ## Day 3 focus
-The Home destination becomes a responsive dashboard with a time-aware greeting, current date, daily progress, tasks, habit check-in, study progress, daily goals, and quick actions. Its clearly labeled sample preview data is separate from persisted user data; persistence is planned for Day 4.
+The Home destination becomes a responsive dashboard with a time-aware greeting, current date, daily progress, tasks, habit check-in, study progress, daily goals, and quick actions. Its clearly labeled sample preview data remains separate from persisted user data.
+
+## Day 4 focus
+Add a local SQLite foundation and persist task creation, reading, updates, completion, and deletion through a repository.

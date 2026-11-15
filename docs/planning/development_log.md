@@ -115,17 +115,32 @@
 ### Next day objective
 - Add Drift and SQLite foundation, initial tables, repositories, and task CRUD persistence.
 
-## Day 4–5 — palette polish and app foundation
+## Day 4 — local task persistence
 
 ### Work completed
-- Refined the app color system into a calmer sage-based palette with semantic tones for surfaces, accents, and status colors.
-- Updated the light and dark Material 3 themes to use consistent palette tokens across cards, surfaces, buttons, and inputs.
-- Kept the color system centralized in the shared constants layer for quick reuse in future features.
+- Added a Drift/SQLite database with a versioned tasks table.
+- Added a task repository for creating, watching, renaming, completing, and deleting tasks.
+- Replaced the Add and Plan placeholders with task entry and persisted task management screens.
+- Added in-memory database tests for task CRUD and a widget test for creating and viewing a saved task.
 
 ### Files modified
-- `lib/core/constants/app_constants.dart`
-- `lib/core/theme/app_theme.dart`
+- `lib/core/database/app_database.dart`
+- `lib/features/tasks/domain/task_repository.dart`
+- `lib/features/add/presentation/add_screen.dart`
+- `lib/features/plan/presentation/plan_screen.dart`
+- `lib/core/navigation/app_router.dart`
+- `lib/app.dart`
+- `test/task_repository_test.dart`
+- `test/widget_test.dart`
+- `pubspec.yaml`
+- `pubspec.lock`
 - `README.md`
+- `docs/architecture/system_architecture.md`
+
+### Tests performed
+- `dart format lib test`
+- `flutter analyze`
+- `flutter test`
 
 ### Notes
-- This quick pass keeps the app visually cohesive while the data layer and feature screens continue toward the next milestone.
+- The sage palette was a separate visual polish pass and is not counted as Day 4 functionality.

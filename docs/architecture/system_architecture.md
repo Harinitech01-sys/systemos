@@ -39,4 +39,10 @@ The application now starts at Home and navigates between Home, Plan, Add, Insigh
 - The dashboard labels the preview as sample content; it is not connected to storage and is not presented as saved user data.
 
 ## Day 3 outcome
-Home now presents a responsive, scrollable dashboard with a time-aware greeting, date, daily progress, today's tasks, habit check-in, study progress, daily goals, and quick actions. Day 4 will introduce real local data persistence.
+Home presents a responsive, scrollable dashboard with a time-aware greeting, date, daily progress, today's tasks, habit check-in, study progress, daily goals, and quick actions.
+
+## Day 4 outcome
+- `core/database/app_database.dart` defines the versioned Drift database and local tasks table.
+- `features/tasks/domain/task_repository.dart` owns task CRUD and watch operations.
+- Add and Plan use the repository to create and manage tasks saved on-device in SQLite.
+- Dashboard sample preview data remains deliberately separate from persisted tasks.
