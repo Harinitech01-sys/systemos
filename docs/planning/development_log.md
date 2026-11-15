@@ -114,3 +114,18 @@
 
 ### Next day objective
 - Add Drift and SQLite foundation, initial tables, repositories, and task CRUD persistence.
+
+## Day 4–5 — palette polish and app foundation
+
+### Work completed
+- Refined the app color system into a calmer sage-based palette with semantic tones for surfaces, accents, and status colors.
+- Updated the light and dark Material 3 themes to use consistent palette tokens across cards, surfaces, buttons, and inputs.
+- Kept the color system centralized in the shared constants layer for quick reuse in future features.
+
+### Files modified
+- `lib/core/constants/app_constants.dart`
+- `lib/core/theme/app_theme.dart`
+- `README.md`
+
+### Notes
+- This quick pass keeps the app visually cohesive while the data layer and feature screens continue toward the next milestone.

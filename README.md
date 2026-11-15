@@ -4,7 +4,7 @@ HariniOS is a personal life-management system built with Flutter and Material 3.
 
 ## Current project status
 - Day 1 foundation, Day 2 navigation shell, and Day 3 dashboard UI are in place.
-- Material 3 light and dark themes are configured.
+- A calm, premium sage palette and Material 3 light and dark themes are configured.
 - Shared constants and startup error handling are in place.
 - GoRouter provides five destinations: Home, Plan, Add, Insights, and Settings.
 - Home shows a responsive dashboard with greeting, date, progress, tasks, habits, study, goals, and quick actions.
